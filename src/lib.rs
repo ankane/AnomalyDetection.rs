@@ -16,10 +16,10 @@ fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32, one
     let num_obs = data.len();
 
     // Check to make sure we have at least two periods worth of data for anomaly context
-    assert!(num_obs >= num_obs_per_period * 2, "Anom detection needs at least 2 periods worth of data");
+    assert!(num_obs >= num_obs_per_period * 2, "series must contain at least 2 periods");
 
     // Handle NAs
-    assert!(!data.iter().any(|v| v.is_nan()), "Data contains NANs");
+    assert!(!data.iter().any(|v| v.is_nan()), "series contains NANs");
 
     // Decompose data. This returns a univarite remainder which will be used for anomaly detection. Optionally, we might NOT decompose.
     let data_decomp = stlrs::params().robust(true).seasonal_length(data.len() * 10 + 1).fit(&data, num_obs_per_period);
@@ -32,8 +32,6 @@ fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32, one
     }
 
     let max_outliers = (num_obs as f32 * k) as usize;
-    assert!(max_outliers > 0);
-
     let n = data.len();
     let mut r_idx = vec![];
 
@@ -150,7 +148,7 @@ impl AnomalyDetectionParams {
             one_tail = false;
             upper_tail = true; // not used
         } else {
-            panic!("Bad direction");
+            panic!("direction must be pos, neg, or both");
         }
 
         AnomalyDetectionResult {
@@ -198,10 +196,31 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected = "Data contains NANs")]
+    #[should_panic(expected = "series contains NANs")]
     fn test_nan() {
         let mut series = vec![1.0; 30];
         series[15] = f32::NAN;
         crate::params().fit(&series, 7);
+    }
+
+    #[test]
+    #[should_panic(expected = "series must contain at least 2 periods")]
+    fn test_empty_data() {
+        let series = Vec::new();
+        crate::params().fit(&series, 7);
+    }
+
+    #[test]
+    #[should_panic(expected = "direction must be pos, neg, or both")]
+    fn test_direction_bad() {
+        let series = generate_series();
+        crate::params().direction("bad").fit(&series, 7);
+    }
+
+    #[test]
+    fn test_max_anoms_zero() {
+        let series = generate_series();
+        let res = crate::params().max_anoms(0.0).fit(&series, 7);
+        assert!(res.anomalies().is_empty());
     }
 }
