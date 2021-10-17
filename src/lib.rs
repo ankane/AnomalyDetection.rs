@@ -78,12 +78,11 @@ fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32, one
         indexes.remove(r_idx_i);
 
         // Compute critical value
-        let p;
-        if one_tail {
-            p = 1.0 - alpha / (n - i + 1) as f32;
+        let p = if one_tail {
+            1.0 - alpha / (n - i + 1) as f32
         } else {
-            p = 1.0 - alpha / (2.0 * (n - i + 1) as f32);
-        }
+            1.0 - alpha / (2.0 * (n - i + 1) as f32)
+        };
 
         let t = StudentsT::new(0.0, 1.0, (n - i - 1) as f64).unwrap().inverse_cdf(p as f64) as f32;
         let lam = t * (n - i) as f32 / (((n - i - 1) as f32 + t.powf(2.0)) * (n - i + 1) as f32).sqrt();
