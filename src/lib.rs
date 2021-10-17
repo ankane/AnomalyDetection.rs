@@ -1,3 +1,7 @@
+//! Anomaly detection for Rust
+//!
+//! [View the docs](https://github.com/ankane/AnomalyDetection.rs)
+
 mod detect_anoms;
 mod error;
 mod params;
