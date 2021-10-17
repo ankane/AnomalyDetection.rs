@@ -1,7 +1,18 @@
 use statrs::distribution::{ContinuousCDF, StudentsT};
+use std::fmt;
 
 #[derive(Debug)]
-pub struct Error(pub(crate) String);
+pub enum Error {
+    Series(String)
+}
+
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            Error::Series(ref err) => write!(f, "{}", err.as_str()),
+        }
+    }
+}
 
 fn mad(data: &[f32]) -> f32 {
     let med = median(data);
@@ -20,12 +31,12 @@ fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32, one
 
     // Check to make sure we have at least two periods worth of data for anomaly context
     if num_obs < num_obs_per_period * 2 {
-        return Err(Error("series must contain at least 2 periods".to_string()));
+        return Err(Error::Series("series must contain at least 2 periods".to_string()));
     }
 
     // Handle NAs
     if data.iter().any(|v| v.is_nan()) {
-        return Err(Error("series contains NANs".to_string()));
+        return Err(Error::Series("series contains NANs".to_string()));
     }
 
     // Decompose data. This returns a univarite remainder which will be used for anomaly detection. Optionally, we might NOT decompose.
@@ -176,7 +187,7 @@ impl AnomalyDetectionParams {
         };
 
         AnomalyDetectionResult {
-            anomalies: detect_anoms(series, period, self.max_anoms, self.alpha, one_tail, upper_tail).unwrap_or_else(|e| panic!("{}", e.0)),
+            anomalies: detect_anoms(series, period, self.max_anoms, self.alpha, one_tail, upper_tail).unwrap_or_else(|e| panic!("{}", e)),
         }
     }
 }
