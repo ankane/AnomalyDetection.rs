@@ -10,9 +10,9 @@ fn mad(data: &[f32]) -> f32 {
 }
 
 fn median(data: &[f32]) -> f32 {
-  let mut sorted = data.to_vec();
-  sorted.sort_by(|a, b| a.partial_cmp(b).unwrap());
-  (sorted[(sorted.len() - 1) / 2] + sorted[sorted.len() / 2]) / 2.0
+    let mut sorted = data.to_vec();
+    sorted.sort_by(|a, b| a.partial_cmp(b).unwrap());
+    (sorted[(sorted.len() - 1) / 2] + sorted[sorted.len() / 2]) / 2.0
 }
 
 fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32, one_tail: bool, upper_tail: bool) -> Result<Vec<usize>, Error> {
@@ -35,7 +35,7 @@ fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32, one
     let mut data = data.to_vec();
     let med = median(&data);
     for i in 0..data.len() {
-      data[i] -= seasonal[i] + med;
+        data[i] -= seasonal[i] + med;
     }
 
     let max_outliers = (num_obs as f32 * k) as usize;
