@@ -1,5 +1,8 @@
 use statrs::distribution::{ContinuousCDF, StudentsT};
 
+#[derive(Debug)]
+pub struct Error(pub(crate) String);
+
 fn mad(data: &[f32]) -> f32 {
     let med = median(data);
     let res = data.iter().map(|v| (v - med).abs()).collect::<Vec<f32>>();
@@ -12,14 +15,18 @@ fn median(data: &[f32]) -> f32 {
   (sorted[(sorted.len() - 1) / 2] + sorted[sorted.len() / 2]) / 2.0
 }
 
-fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32, one_tail: bool, upper_tail: bool) -> Vec<usize> {
+fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32, one_tail: bool, upper_tail: bool) -> Result<Vec<usize>, Error> {
     let num_obs = data.len();
 
     // Check to make sure we have at least two periods worth of data for anomaly context
-    assert!(num_obs >= num_obs_per_period * 2, "series must contain at least 2 periods");
+    if num_obs < num_obs_per_period * 2 {
+        return Err(Error("series must contain at least 2 periods".to_string()));
+    }
 
     // Handle NAs
-    assert!(!data.iter().any(|v| v.is_nan()), "series contains NANs");
+    if data.iter().any(|v| v.is_nan()) {
+        return Err(Error("series contains NANs".to_string()));
+    }
 
     // Decompose data. This returns a univarite remainder which will be used for anomaly detection. Optionally, we might NOT decompose.
     let data_decomp = stlrs::params().robust(true).seasonal_length(data.len() * 10 + 1).fit(&data, num_obs_per_period);
@@ -91,7 +98,7 @@ fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32, one
     // Sort like R version
     r_idx.sort_by(|a, b| a.partial_cmp(b).unwrap());
 
-    r_idx
+    Ok(r_idx)
 }
 
 pub struct AnomalyDetectionParams {
@@ -151,8 +158,9 @@ impl AnomalyDetectionParams {
             panic!("direction must be pos, neg, or both");
         }
 
+        // TODO return Result
         AnomalyDetectionResult {
-            anomalies: detect_anoms(series, period, self.max_anoms, self.alpha, one_tail, upper_tail),
+            anomalies: detect_anoms(series, period, self.max_anoms, self.alpha, one_tail, upper_tail).unwrap_or_else(|e| panic!("{}", e.0)),
         }
     }
 }
