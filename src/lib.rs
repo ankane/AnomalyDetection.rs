@@ -175,7 +175,6 @@ impl AnomalyDetectionParams {
             Direction::Both => (false, true),
         };
 
-        // TODO return Result
         AnomalyDetectionResult {
             anomalies: detect_anoms(series, period, self.max_anoms, self.alpha, one_tail, upper_tail).unwrap_or_else(|e| panic!("{}", e.0)),
         }
