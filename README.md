@@ -43,7 +43,7 @@ Set parameters
 anomaly_detection::params()
     .alpha(0.05)           // level of statistical significance
     .max_anoms(0.1)        // maximum number of anomalies as percent of data
-    .direction("both")     // pos, neg, or both
+    .direction(Direction::Both)    
 ```
 
 ## Credits
