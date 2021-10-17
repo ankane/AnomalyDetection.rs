@@ -102,9 +102,20 @@ fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32, one
 }
 
 pub enum Direction {
-    Negative,
     Positive,
+    Negative,
     Both,
+}
+
+// TODO remove in 0.2.0
+impl Into<String> for Direction {
+    fn into(self) -> String {
+        match self {
+            Direction::Positive => "pos".to_string(),
+            Direction::Negative => "neg".to_string(),
+            _ => "both".to_string(),
+        }
+    }
 }
 
 pub struct AnomalyDetectionParams {
@@ -142,11 +153,22 @@ impl AnomalyDetectionParams {
         self
     }
 
-    pub fn direction(&mut self, value: Direction) -> &mut Self {
-        self.direction = value;
+    // TODO only support enum in 0.2.0
+    pub fn direction<S: Into<String>>(&mut self, value: S) -> &mut Self {
+        let direction = value.into();
+        if direction == "pos".to_string() {
+            self.direction = Direction::Positive;
+        } else if direction == "neg".to_string() {
+            self.direction = Direction::Negative;
+        } else if direction == "both".to_string() {
+            self.direction = Direction::Both;
+        } else {
+            panic!("direction must be pos, neg, or both")
+        }
         self
     }
 
+    // TODO return Result in 0.2.0
     pub fn fit(&self, series: &[f32], period: usize) -> AnomalyDetectionResult {
         let (one_tail, upper_tail) = match self.direction {
             Direction::Positive => (true, true),
@@ -220,6 +242,13 @@ mod tests {
     fn test_empty_data() {
         let series = Vec::new();
         crate::params().fit(&series, 7);
+    }
+
+    #[test]
+    #[should_panic(expected = "direction must be pos, neg, or both")]
+    fn test_direction_bad() {
+        let series = generate_series();
+        crate::params().direction("bad").fit(&series, 7);
     }
 
     #[test]
