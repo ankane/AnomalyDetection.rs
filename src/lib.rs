@@ -101,17 +101,23 @@ fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32, one
     Ok(r_idx)
 }
 
+pub enum Direction {
+    Negative,
+    Positive,
+    Both,
+}
+
 pub struct AnomalyDetectionParams {
     alpha: f32,
     max_anoms: f32,
-    direction: String,
+    direction: Direction,
 }
 
 pub fn params() -> AnomalyDetectionParams {
     AnomalyDetectionParams {
         alpha: 0.05,
         max_anoms: 0.1,
-        direction: "both".to_string(),
+        direction: Direction::Both,
     }
 }
 
@@ -136,27 +142,17 @@ impl AnomalyDetectionParams {
         self
     }
 
-    pub fn direction<S: Into<String>>(&mut self, value: S) -> &mut Self {
-        self.direction = value.into();
+    pub fn direction(&mut self, value: Direction) -> &mut Self {
+        self.direction = value;
         self
     }
 
     pub fn fit(&self, series: &[f32], period: usize) -> AnomalyDetectionResult {
-        let one_tail;
-        let upper_tail;
-        // TODO make enum
-        if self.direction == "pos" {
-            one_tail = true;
-            upper_tail = true;
-        } else if self.direction == "neg" {
-            one_tail = true;
-            upper_tail = false;
-        } else if self.direction == "both" {
-            one_tail = false;
-            upper_tail = true; // not used
-        } else {
-            panic!("direction must be pos, neg, or both");
-        }
+        let (one_tail, upper_tail) = match self.direction {
+            Direction::Positive => (true, true),
+            Direction::Negative => (true, false),
+            Direction::Both => (false, true),
+        };
 
         // TODO return Result
         AnomalyDetectionResult {
@@ -167,6 +163,8 @@ impl AnomalyDetectionParams {
 
 #[cfg(test)]
 mod tests {
+    use super::Direction;
+
     fn generate_series() -> Vec<f32> {
         vec![
             5.0, 9.0, 2.0, 9.0, 0.0, 6.0, 3.0, 8.0, 5.0, 18.0,
@@ -185,14 +183,20 @@ mod tests {
     #[test]
     fn test_direction_pos() {
         let series = generate_series();
-        let res = crate::params().max_anoms(0.2).direction("pos").fit(&series, 7);
+        let res = crate::params()
+            .max_anoms(0.2)
+            .direction(Direction::Positive)
+            .fit(&series, 7);
         assert_eq!(&vec![9, 26], res.anomalies());
     }
 
     #[test]
     fn test_direction_neg() {
         let series = generate_series();
-        let res = crate::params().max_anoms(0.2).direction("neg").fit(&series, 7);
+        let res = crate::params()
+            .max_anoms(0.2)
+            .direction(Direction::Negative)
+            .fit(&series, 7);
         assert_eq!(&vec![15], res.anomalies());
     }
 
@@ -216,13 +220,6 @@ mod tests {
     fn test_empty_data() {
         let series = Vec::new();
         crate::params().fit(&series, 7);
-    }
-
-    #[test]
-    #[should_panic(expected = "direction must be pos, neg, or both")]
-    fn test_direction_bad() {
-        let series = generate_series();
-        crate::params().direction("bad").fit(&series, 7);
     }
 
     #[test]
