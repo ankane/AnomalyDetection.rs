@@ -3,7 +3,7 @@ mod error;
 mod params;
 
 pub use error::Error;
-pub use params::{params, Direction};
+pub use params::{params, AnomalyDetectionParams, AnomalyDetectionResult, Direction};
 
 #[cfg(test)]
 mod tests {
