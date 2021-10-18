@@ -49,6 +49,7 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
     let mut anomalies = Vec::new();
     let max_outliers = (n as f32 * k) as usize;
     let (mut data, mut indexes) = sort_with_index(&data);
+    let mut num_anoms = 0;
 
     // Compute test statistic until r=max_outliers values have been removed from the sample
     for i in 1..=max_outliers {
@@ -71,11 +72,11 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
         }
 
         let (idx, r0) = ares.iter().enumerate().max_by(|(_, a), (_, b)| a.partial_cmp(b).unwrap()).unwrap();
-        let anomaly = indexes[idx];
 
         // Only need to take sigma of r for performance
         let r = *r0 / data_sigma;
 
+        anomalies.push(indexes[idx]);
         data.remove(idx);
         indexes.remove(idx);
 
@@ -90,11 +91,11 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
         let lam = t * (n - i) as f32 / (((n - i - 1) as f32 + t.powf(2.0)) * (n - i + 1) as f32).sqrt();
 
         if r > lam {
-            anomalies.push(anomaly);
-        } else {
-            break;
+            num_anoms = i;
         }
     }
+
+    anomalies = anomalies[0..num_anoms].to_vec();
 
     // Sort like R version
     anomalies.sort_unstable_by(|a, b| a.partial_cmp(b).unwrap());
