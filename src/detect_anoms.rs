@@ -2,14 +2,25 @@ use crate::Error;
 use statrs::distribution::{ContinuousCDF, StudentsT};
 
 fn mad(data: &[f32], med: f32) -> f32 {
-    let res = data.iter().map(|v| (v - med).abs()).collect::<Vec<f32>>();
+    let mut res = data.iter().map(|v| (v - med).abs()).collect::<Vec<f32>>();
+    res.sort_unstable_by(|a, b| a.partial_cmp(b).unwrap());
     1.4826 * median(&res)
 }
 
-fn median(data: &[f32]) -> f32 {
-    let mut sorted = data.to_vec();
-    sorted.sort_unstable_by(|a, b| a.partial_cmp(b).unwrap());
+fn median(sorted: &[f32]) -> f32 {
     (sorted[(sorted.len() - 1) / 2] + sorted[sorted.len() / 2]) / 2.0
+}
+
+fn sort_with_index(input: &[f32]) -> (Vec<f32>, Vec<usize>) {
+    let n = input.len();
+    let mut combined = Vec::with_capacity(n);
+    for i in 0..n {
+        combined.push((i, input[i]));
+    }
+    combined.sort_by(|(_, a), (_, b)| a.partial_cmp(b).unwrap());
+    let data = combined.iter().map(|(_, v)| *v).collect::<Vec<f32>>();
+    let indexes = combined.iter().map(|(k, _)| *k).collect::<Vec<usize>>();
+    (data, indexes)
 }
 
 pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32, one_tail: bool, upper_tail: bool) -> Result<Vec<usize>, Error> {
@@ -39,14 +50,10 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
     let n = data.len();
     let mut anomalies = Vec::new();
 
-    let mut indexes = Vec::with_capacity(data.len());
-    for i in 0..data.len() {
-        indexes.push(i);
-    }
+    let (mut data, mut indexes) = sort_with_index(&data);
 
     // Compute test statistic until r=max_outliers values have been removed from the sample
     for i in 1..=max_outliers {
-        // TODO Improve performance between loop iterations
         let ma = median(&data);
         let ares: Vec<f32>;
         if one_tail {
