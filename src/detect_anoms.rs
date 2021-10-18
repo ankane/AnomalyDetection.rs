@@ -37,7 +37,7 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
 
     let max_outliers = (num_obs as f32 * k) as usize;
     let n = data.len();
-    let mut anomalies = vec![];
+    let mut anomalies = Vec::new();
 
     let mut indexes = Vec::with_capacity(data.len());
     for i in 0..data.len() {
