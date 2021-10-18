@@ -72,14 +72,14 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
             break;
         }
 
-        let (r_idx_i, r0) = ares.iter().enumerate().max_by(|(_, a), (_, b)| a.partial_cmp(b).unwrap()).unwrap();
-        let r_idx_i2 = indexes[r_idx_i];
+        let (idx, r0) = ares.iter().enumerate().max_by(|(_, a), (_, b)| a.partial_cmp(b).unwrap()).unwrap();
+        let anomaly = indexes[idx];
 
         // Only need to take sigma of r for performance
         let r = *r0 / data_sigma;
 
-        data.remove(r_idx_i);
-        indexes.remove(r_idx_i);
+        data.remove(idx);
+        indexes.remove(idx);
 
         // Compute critical value
         let p = if one_tail {
@@ -92,7 +92,7 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
         let lam = t * (n - i) as f32 / (((n - i - 1) as f32 + t.powf(2.0)) * (n - i + 1) as f32).sqrt();
 
         if r > lam {
-            anomalies.push(r_idx_i2);
+            anomalies.push(anomaly);
         } else {
             break;
         }
