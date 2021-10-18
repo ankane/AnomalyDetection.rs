@@ -24,10 +24,10 @@ fn sort_with_index(input: &[f32]) -> (Vec<f32>, Vec<usize>) {
 }
 
 pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32, one_tail: bool, upper_tail: bool) -> Result<Vec<usize>, Error> {
-    let num_obs = data.len();
+    let n = data.len();
 
     // Check to make sure we have at least two periods worth of data for anomaly context
-    if num_obs < num_obs_per_period * 2 {
+    if n < num_obs_per_period * 2 {
         return Err(Error::Series("series must contain at least 2 periods".to_string()));
     }
 
@@ -42,14 +42,12 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
     let seasonal = data_decomp.seasonal();
     let mut data = data.to_vec();
     let med = median(&data);
-    for i in 0..data.len() {
+    for i in 0..n {
         data[i] -= seasonal[i] + med;
     }
 
-    let max_outliers = (num_obs as f32 * k) as usize;
-    let n = data.len();
     let mut anomalies = Vec::new();
-
+    let max_outliers = (n as f32 * k) as usize;
     let (mut data, mut indexes) = sort_with_index(&data);
 
     // Compute test statistic until r=max_outliers values have been removed from the sample
