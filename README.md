@@ -1,6 +1,6 @@
 # AnomalyDetection.rs
 
-[AnomalyDetection](https://github.com/twitter/AnomalyDetection) for Rust
+Time series [AnomalyDetection](https://github.com/twitter/AnomalyDetection) for Rust
 
 Learn [how it works](https://blog.twitter.com/engineering/en_us/a/2015/introducing-practical-and-robust-anomaly-detection-in-a-time-series)
 
