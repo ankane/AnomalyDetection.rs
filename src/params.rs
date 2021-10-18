@@ -21,6 +21,7 @@ pub struct AnomalyDetectionParams {
     alpha: f32,
     max_anoms: f32,
     direction: Direction,
+    verbose: bool
 }
 
 pub fn params() -> AnomalyDetectionParams {
@@ -28,6 +29,7 @@ pub fn params() -> AnomalyDetectionParams {
         alpha: 0.05,
         max_anoms: 0.1,
         direction: Direction::Both,
+        verbose: false
     }
 }
 
@@ -67,6 +69,11 @@ impl AnomalyDetectionParams {
         self
     }
 
+    pub fn verbose(&mut self, value: bool) -> &mut Self {
+        self.verbose = value;
+        self
+    }
+
     // TODO return Result in 0.2.0
     pub fn fit(&self, series: &[f32], period: usize) -> AnomalyDetectionResult {
         let (one_tail, upper_tail) = match self.direction {
@@ -76,7 +83,7 @@ impl AnomalyDetectionParams {
         };
 
         AnomalyDetectionResult {
-            anomalies: detect_anoms(series, period, self.max_anoms, self.alpha, one_tail, upper_tail).unwrap_or_else(|e| panic!("{}", e)),
+            anomalies: detect_anoms(series, period, self.max_anoms, self.alpha, one_tail, upper_tail, self.verbose).unwrap_or_else(|e| panic!("{}", e)),
         }
     }
 }

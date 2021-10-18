@@ -23,7 +23,7 @@ fn sort_with_index(input: &[f32]) -> (Vec<f32>, Vec<usize>) {
     (data, indexes)
 }
 
-pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32, one_tail: bool, upper_tail: bool) -> Result<Vec<usize>, Error> {
+pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32, one_tail: bool, upper_tail: bool, verbose: bool) -> Result<Vec<usize>, Error> {
     let n = data.len();
 
     // Check to make sure we have at least two periods worth of data for anomaly context
@@ -53,6 +53,10 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
 
     // Compute test statistic until r=max_outliers values have been removed from the sample
     for i in 1..=max_outliers {
+        if verbose {
+            println!("{} / {} completed", i, max_outliers);
+        }
+
         let ma = median(&data);
         let ares: Vec<f32>;
         if one_tail {
