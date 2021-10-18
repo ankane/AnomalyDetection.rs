@@ -1,6 +1,6 @@
 [package]
 name = "anomaly_detection"
-version = "0.1.1"
+version = "0.1.2"
 description = "Time series anomaly detection for Rust"
 repository = "https://github.com/ankane/AnomalyDetection.rs"
 license = "GPL-3.0-or-later"
