@@ -11,18 +11,6 @@ fn median(sorted: &[f32]) -> f32 {
     (sorted[(sorted.len() - 1) / 2] + sorted[sorted.len() / 2]) / 2.0
 }
 
-fn sort_with_index(input: &[f32]) -> (Vec<f32>, Vec<usize>) {
-    let n = input.len();
-    let mut combined = Vec::with_capacity(n);
-    for i in 0..n {
-        combined.push((i, input[i]));
-    }
-    combined.sort_by(|(_, a), (_, b)| a.partial_cmp(b).unwrap());
-    let data = combined.iter().map(|(_, v)| *v).collect::<Vec<f32>>();
-    let indexes = combined.iter().map(|(k, _)| *k).collect::<Vec<usize>>();
-    (data, indexes)
-}
-
 pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32, one_tail: bool, upper_tail: bool, verbose: bool) -> Result<Vec<usize>, Error> {
     let n = data.len();
 
@@ -51,7 +39,9 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
     let max_outliers = (n as f32 * k) as usize;
 
     // Sort data for fast median
-    let (mut data, mut indexes) = sort_with_index(&data);
+    let mut indexes = (0..n).collect::<Vec<usize>>();
+    indexes.sort_by(|a, b| (&data[*a]).partial_cmp(&data[*b]).unwrap());
+    data.sort_unstable_by(|a, b| a.partial_cmp(b).unwrap());
 
     // Compute test statistic until r=max_outliers values have been removed from the sample
     for i in 1..=max_outliers {
