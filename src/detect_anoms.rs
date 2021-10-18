@@ -9,7 +9,7 @@ fn mad(data: &[f32]) -> f32 {
 
 fn median(data: &[f32]) -> f32 {
     let mut sorted = data.to_vec();
-    sorted.sort_by(|a, b| a.partial_cmp(b).unwrap());
+    sorted.sort_unstable_by(|a, b| a.partial_cmp(b).unwrap());
     (sorted[(sorted.len() - 1) / 2] + sorted[sorted.len() / 2]) / 2.0
 }
 
@@ -93,7 +93,7 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
     }
 
     // Sort like R version
-    anomalies.sort_by(|a, b| a.partial_cmp(b).unwrap());
+    anomalies.sort_unstable_by(|a, b| a.partial_cmp(b).unwrap());
 
     Ok(anomalies)
 }
