@@ -38,7 +38,7 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
 
     let max_outliers = (num_obs as f32 * k) as usize;
     let n = data.len();
-    let mut r_idx = vec![];
+    let mut anomalies = vec![];
 
     let mut indexes = Vec::with_capacity(data.len());
     for i in 0..data.len() {
@@ -86,14 +86,14 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
         let lam = t * (n - i) as f32 / (((n - i - 1) as f32 + t.powf(2.0)) * (n - i + 1) as f32).sqrt();
 
         if r > lam {
-            r_idx.push(r_idx_i2);
+            anomalies.push(r_idx_i2);
         } else {
             break;
         }
     }
 
     // Sort like R version
-    r_idx.sort_by(|a, b| a.partial_cmp(b).unwrap());
+    anomalies.sort_by(|a, b| a.partial_cmp(b).unwrap());
 
-    Ok(r_idx)
+    Ok(anomalies)
 }
