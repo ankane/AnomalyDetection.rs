@@ -50,7 +50,7 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
     let mut num_anoms = 0;
     let max_outliers = (n as f32 * k) as usize;
 
-    // sort data for fast median
+    // Sort data for fast median
     let (mut data, mut indexes) = sort_with_index(&data);
 
     // Compute test statistic until r=max_outliers values have been removed from the sample
