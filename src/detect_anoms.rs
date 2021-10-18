@@ -1,8 +1,7 @@
 use crate::Error;
 use statrs::distribution::{ContinuousCDF, StudentsT};
 
-fn mad(data: &[f32]) -> f32 {
-    let med = median(data);
+fn mad(data: &[f32], med: f32) -> f32 {
     let res = data.iter().map(|v| (v - med).abs()).collect::<Vec<f32>>();
     1.4826 * median(&res)
 }
@@ -61,7 +60,7 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
         }
 
         // Protect against constant time series
-        let data_sigma = mad(&data);
+        let data_sigma = mad(&data, ma);
         if data_sigma == 0.0 {
             break;
         }
