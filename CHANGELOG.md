@@ -1,4 +1,4 @@
-## 0.2.0 (unreleased)
+## 0.2.0 (2021-10-25)
 
 - Changed `fit` to return `Result`
 - Dropped support for `String` direction
