@@ -26,7 +26,7 @@ let series = vec![
 ];
 let period = 7; // number of observations in a single period
 
-let res = anomaly_detection::params().fit(&series, period);
+let res = anomaly_detection::params().fit(&series, period).unwrap();
 ```
 
 Get anomalies

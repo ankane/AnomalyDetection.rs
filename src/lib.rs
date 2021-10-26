@@ -11,7 +11,7 @@ pub use params::{params, AnomalyDetectionParams, AnomalyDetectionResult, Directi
 
 #[cfg(test)]
 mod tests {
-    use super::Direction;
+    use crate::{Direction, Error};
 
     fn generate_series() -> Vec<f32> {
         vec![
@@ -24,7 +24,7 @@ mod tests {
     #[test]
     fn test_works() {
         let series = generate_series();
-        let res = crate::params().max_anoms(0.2).fit(&series, 7);
+        let res = crate::params().max_anoms(0.2).fit(&series, 7).unwrap();
         assert_eq!(&vec![9, 15, 26], res.anomalies());
     }
 
@@ -34,7 +34,8 @@ mod tests {
         let res = crate::params()
             .max_anoms(0.2)
             .direction(Direction::Positive)
-            .fit(&series, 7);
+            .fit(&series, 7)
+            .unwrap();
         assert_eq!(&vec![9, 26], res.anomalies());
     }
 
@@ -44,43 +45,43 @@ mod tests {
         let res = crate::params()
             .max_anoms(0.2)
             .direction(Direction::Negative)
-            .fit(&series, 7);
+            .fit(&series, 7)
+            .unwrap();
         assert_eq!(&vec![15], res.anomalies());
     }
 
     #[test]
     fn test_alpha() {
         let series = generate_series();
-        let res = crate::params().max_anoms(0.2).alpha(0.5).fit(&series, 7);
+        let res = crate::params().max_anoms(0.2).alpha(0.5).fit(&series, 7).unwrap();
         assert_eq!(&vec![1, 4, 9, 15, 26], res.anomalies());
     }
 
     #[test]
-    #[should_panic(expected = "series contains NANs")]
     fn test_nan() {
         let mut series = vec![1.0; 30];
         series[15] = f32::NAN;
-        crate::params().fit(&series, 7);
+        let result = crate::params().fit(&series, 7);
+        assert_eq!(
+            result.unwrap_err(),
+            Error::Series("series contains NANs".to_string())
+        );
     }
 
     #[test]
-    #[should_panic(expected = "series must contain at least 2 periods")]
     fn test_empty_data() {
         let series = Vec::new();
-        crate::params().fit(&series, 7);
-    }
-
-    #[test]
-    #[should_panic(expected = "direction must be pos, neg, or both")]
-    fn test_direction_bad() {
-        let series = generate_series();
-        crate::params().direction("bad").fit(&series, 7);
+        let result = crate::params().fit(&series, 7);
+        assert_eq!(
+            result.unwrap_err(),
+            Error::Series("series must contain at least 2 periods".to_string())
+        );
     }
 
     #[test]
     fn test_max_anoms_zero() {
         let series = generate_series();
-        let res = crate::params().max_anoms(0.0).fit(&series, 7);
+        let res = crate::params().max_anoms(0.0).fit(&series, 7).unwrap();
         assert!(res.anomalies().is_empty());
     }
 }

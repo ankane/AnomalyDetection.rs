@@ -12,4 +12,4 @@ readme = "README.md"
 
 [dependencies]
 statrs = "0.15"
-stlrs = "0.1"
+stlrs = "0.2"
