@@ -1,3 +1,7 @@
+## 0.2.1 (unreleased)
+
+- Added `Error` trait to errors
+
 ## 0.2.0 (2021-10-25)
 
 - Changed `fit` to return `Result`
