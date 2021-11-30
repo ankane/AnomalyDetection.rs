@@ -25,7 +25,7 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
     }
 
     // Decompose data. This returns a univarite remainder which will be used for anomaly detection. Optionally, we might NOT decompose.
-    let data_decomp = stlrs::params().robust(true).seasonal_length(data.len() * 10 + 1).fit(&data, num_obs_per_period).unwrap();
+    let data_decomp = stlrs::params().robust(true).seasonal_length(data.len() * 10 + 1).fit(data, num_obs_per_period).unwrap();
 
     let seasonal = data_decomp.seasonal();
     let mut data = data.to_vec();
