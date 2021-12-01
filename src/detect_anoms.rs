@@ -28,6 +28,8 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
     let data_decomp = stlrs::params().robust(true).seasonal_length(data.len() * 10 + 1).fit(data, num_obs_per_period).unwrap();
 
     let seasonal = data_decomp.seasonal();
+
+    // Copy data since we need to modify it
     let mut data = data.to_vec();
     let med = median(&data);
     for i in 0..n {
