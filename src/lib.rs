@@ -5,6 +5,7 @@
 mod detect_anoms;
 mod error;
 mod params;
+mod students_t;
 
 pub use error::Error;
 pub use params::{params, AnomalyDetectionParams, AnomalyDetectionResult, Direction};

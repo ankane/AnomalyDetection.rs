@@ -1,3 +1,7 @@
+## 0.2.2 (unreleased)
+
+- Reduced dependencies
+
 ## 0.2.1 (2021-12-15)
 
 - Added `Error` trait to errors

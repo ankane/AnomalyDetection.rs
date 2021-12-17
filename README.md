@@ -54,6 +54,8 @@ This library was ported from the [AnomalyDetection](https://github.com/twitter/A
 ## References
 
 - [Automatic Anomaly Detection in the Cloud Via Statistical Learning](https://arxiv.org/abs/1704.07706)
+- [Algorithm 396: Student's t-Quantiles](https://dl.acm.org/doi/10.1145/355598.355600)
+- [A handy approximation for the error function and its inverse](https://drive.google.com/file/d/0B2Mt7luZYBrwZlctV3A3eF82VGM/view?resourcekey=0-UQpPhwZgzP0sF4LHBDlLtg)
 
 ## History
 
