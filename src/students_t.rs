@@ -72,8 +72,9 @@ fn inverse_erf(x: f64) -> f64 {
     let ln = (1.0 - x * x).ln();
     let f1 = 2.0 / (PI * a);
     let f2 = ln / 2.0;
-    let f3 = 1.0 / a * ln;
-    (-f1 - f2 + ((f1 + f2).powf(2.0) - f3).sqrt()).sqrt()
+    let f3 = f1 + f2;
+    let f4 = 1.0 / a * ln;
+    (-f1 - f2 + (f3 * f3 - f4).sqrt()).sqrt()
 }
 
 #[cfg(test)]
