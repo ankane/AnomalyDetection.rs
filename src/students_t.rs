@@ -32,21 +32,21 @@ pub fn inverse_cdf(p: f64, n: u64) -> f64 {
     let n = n as f64;
 
     let a = 1.0 / (n - 0.5);
-    let b = 48.0 / a.powf(2.0);
+    let b = 48.0 / (a * a);
     let mut c = ((20700.0 * a / b - 98.0) * a - 16.0) * a + 96.36;
     let d = ((94.5 / (b + c) - 3.0) / b + 1.0) * (a * half_pi).sqrt() * n;
     let mut x = d * p;
     let mut y = x.powf(2.0 / n);
     if y > 0.05 + a {
         x = normdev(p * 0.5);
-        y = x.powf(2.0);
+        y = x * x;
         if ni < 5 {
             c += 0.3 * (n - 4.5) * (x + 0.6);
         }
         c = (((0.05 * d * x - 5.0) * x - 7.0) * x - 2.0) * x + b + c;
         y = (((((0.4 * y + 6.3) * y + 36.0) * y + 94.5) / c - y - 3.0) / b + 1.0) * x;
-        y = a * y.powf(2.0);
-        y = if y > 0.002 { y.exp() - 1.0 } else { 0.5 * y.powf(2.0) + y };
+        y = a * y * y;
+        y = if y > 0.002 { y.exp() - 1.0 } else { 0.5 * y * y + y };
     } else {
         y = ((1.0 / (((n + 6.0) / (n * y) - 0.089 * d - 0.822) * (n + 2.0) * 3.0) + 0.5 / (n + 4.0)) * y - 1.0) * (n + 1.0) / (n + 2.0) + 1.0 / y;
     }
@@ -69,11 +69,11 @@ fn inverse_erf(x: f64) -> f64 {
     assert!(x >= 0.0 && x <= 1.0);
 
     let a = 0.147;
-    let ln = (1.0 - x.powf(2.0)).ln();
+    let ln = (1.0 - x * x).ln();
     let f1 = 2.0 / (PI * a);
     let f2 = ln / 2.0;
     let f3 = 1.0 / a * ln;
-    (-f1 - f2 + ((f1 + f2).powf(2.0) - f3).sqrt()).powf(0.5)
+    (-f1 - f2 + ((f1 + f2).powf(2.0) - f3).sqrt()).sqrt()
 }
 
 #[cfg(test)]
