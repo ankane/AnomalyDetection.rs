@@ -91,7 +91,7 @@ mod tests {
 
     #[test]
     fn test_one() {
-        let expected = vec![NEG_INFINITY, -3.07768, -1.37638, -0.72654, -0.32492, 0.0, 0.32492, 0.72654, 1.37638, 3.07768, INFINITY];
+        let expected = [NEG_INFINITY, -3.07768, -1.37638, -0.72654, -0.32492, 0.0, 0.32492, 0.72654, 1.37638, 3.07768, INFINITY];
         for i in 0..=10 {
             assert_in_delta(inverse_cdf(0.1 * i as f64, 1), expected[i]);
         }
@@ -99,7 +99,7 @@ mod tests {
 
     #[test]
     fn test_two() {
-        let expected = vec![NEG_INFINITY, -1.88562, -1.06066, -0.61721, -0.28868, 0.0, 0.28868, 0.61721, 1.06066, 1.88562, INFINITY];
+        let expected = [NEG_INFINITY, -1.88562, -1.06066, -0.61721, -0.28868, 0.0, 0.28868, 0.61721, 1.06066, 1.88562, INFINITY];
         for i in 0..=10 {
             assert_in_delta(inverse_cdf(0.1 * i as f64, 2), expected[i]);
         }
@@ -107,7 +107,7 @@ mod tests {
 
     #[test]
     fn test_thirty() {
-        let expected = vec![NEG_INFINITY, -1.31042, -0.85377, -0.53002, -0.25561, 0.0, 0.25561, 0.53002, 0.85377, 1.31042, INFINITY];
+        let expected = [NEG_INFINITY, -1.31042, -0.85377, -0.53002, -0.25561, 0.0, 0.25561, 0.53002, 0.85377, 1.31042, INFINITY];
         for i in 0..=10 {
             assert_in_delta(inverse_cdf(0.1 * i as f64, 30), expected[i]);
         }
