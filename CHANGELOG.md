@@ -1,4 +1,4 @@
-## 0.2.2 (unreleased)
+## 0.2.2 (2022-01-03)
 
 - Reduced dependencies
 
