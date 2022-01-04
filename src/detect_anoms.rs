@@ -1,5 +1,5 @@
-use crate::students_t;
 use crate::Error;
+use distrs::StudentsT;
 
 fn mad(data: &[f32], med: f32) -> f32 {
     let mut res = data.iter().map(|v| (v - med).abs()).collect::<Vec<f32>>();
@@ -85,7 +85,7 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
             1.0 - alpha / (2.0 * (n - i + 1) as f32)
         };
 
-        let t = students_t::inverse_cdf(p as f64, (n - i - 1) as u64) as f32;
+        let t = StudentsT::ppf(p as f64, (n - i - 1) as u32) as f32;
         let lam = t * (n - i) as f32 / (((n - i - 1) as f32 + t.powf(2.0)) * (n - i + 1) as f32).sqrt();
 
         if r > lam {
