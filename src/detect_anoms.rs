@@ -4,10 +4,16 @@ use distrs::StudentsT;
 fn mad(data: &[f32], med: f32) -> f32 {
     let mut res = data.iter().map(|v| (v - med).abs()).collect::<Vec<f32>>();
     res.sort_unstable_by(|a, b| a.partial_cmp(b).unwrap());
-    1.4826 * median(&res)
+    1.4826 * median_sorted(&res)
 }
 
-fn median(sorted: &[f32]) -> f32 {
+fn median(data: &[f32]) -> f32 {
+    let mut sorted = data.to_vec();
+    sorted.sort_unstable_by(|a, b| a.partial_cmp(b).unwrap());
+    median_sorted(&sorted)
+}
+
+fn median_sorted(sorted: &[f32]) -> f32 {
     (sorted[(sorted.len() - 1) / 2] + sorted[sorted.len() / 2]) / 2.0
 }
 
@@ -51,7 +57,7 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
             println!("{} / {} completed", i, max_outliers);
         }
 
-        let ma = median(&data);
+        let ma = median_sorted(&data);
         let ares: Vec<f32>;
         if one_tail {
             if upper_tail {

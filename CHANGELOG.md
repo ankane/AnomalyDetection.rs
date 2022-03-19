@@ -1,3 +1,7 @@
+## 0.2.3 (unreleased)
+
+- Fixed initial median calculation
+
 ## 0.2.2 (2022-01-03)
 
 - Reduced dependencies
