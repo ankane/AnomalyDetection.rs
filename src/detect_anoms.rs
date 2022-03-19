@@ -35,9 +35,9 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
         data[i] -= seasonal[i] + med;
     }
 
-    let mut anomalies = Vec::new();
     let mut num_anoms = 0;
     let max_outliers = (n as f32 * k) as usize;
+    let mut anomalies = Vec::with_capacity(max_outliers);
 
     // Sort data for fast median
     // Use stable sort for indexes for deterministic results
@@ -86,14 +86,14 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
         };
 
         let t = StudentsT::ppf(p as f64, (n - i - 1) as u32) as f32;
-        let lam = t * (n - i) as f32 / (((n - i - 1) as f32 + t.powf(2.0)) * (n - i + 1) as f32).sqrt();
+        let lam = t * (n - i) as f32 / (((n - i - 1) as f32 + t * t) * (n - i + 1) as f32).sqrt();
 
         if r > lam {
             num_anoms = i;
         }
     }
 
-    anomalies = anomalies[0..num_anoms].to_vec();
+    anomalies.truncate(num_anoms);
 
     // Sort like R version
     anomalies.sort_unstable_by(|a, b| a.partial_cmp(b).unwrap());
