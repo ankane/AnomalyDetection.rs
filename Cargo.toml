@@ -11,5 +11,5 @@ readme = "README.md"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-distrs = "0.1"
+distrs = "0.2"
 stlrs = "0.2"
