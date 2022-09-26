@@ -48,7 +48,7 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
     // Sort data for fast median
     // Use stable sort for indexes for deterministic results
     let mut indexes = (0..n).collect::<Vec<usize>>();
-    indexes.sort_by(|a, b| (&data[*a]).partial_cmp(&data[*b]).unwrap());
+    indexes.sort_by(|a, b| data[*a].partial_cmp(&data[*b]).unwrap());
     data.sort_unstable_by(|a, b| a.partial_cmp(b).unwrap());
 
     // Compute test statistic until r=max_outliers values have been removed from the sample

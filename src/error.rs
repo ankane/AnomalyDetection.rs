@@ -1,7 +1,7 @@
 use std::error;
 use std::fmt;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Eq, PartialEq)]
 pub enum Error {
     Series(String)
 }
