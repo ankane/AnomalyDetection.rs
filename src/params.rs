@@ -31,7 +31,7 @@ pub struct AnomalyDetectionResult {
 }
 
 impl AnomalyDetectionResult {
-    pub fn anomalies(&self) -> &Vec<usize> {
+    pub fn anomalies(&self) -> &[usize] {
         &self.anomalies
     }
 }

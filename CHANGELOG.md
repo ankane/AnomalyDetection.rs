@@ -1,3 +1,7 @@
+## 0.3.0 (unreleased)
+
+- Changed `anomalies` method to return slice
+
 ## 0.2.3 (2022-03-19)
 
 - Fixed initial median calculation
