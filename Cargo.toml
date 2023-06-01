@@ -5,7 +5,8 @@ description = "Time series anomaly detection for Rust"
 repository = "https://github.com/ankane/AnomalyDetection.rs"
 license = "GPL-3.0-or-later"
 authors = ["Andrew Kane <andrew@ankane.org>"]
-edition = "2018"
+edition = "2021"
+rust-version = "1.56.0"
 readme = "README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
