@@ -17,12 +17,7 @@ pub struct AnomalyDetectionParams {
 }
 
 pub fn params() -> AnomalyDetectionParams {
-    AnomalyDetectionParams {
-        alpha: 0.05,
-        max_anoms: 0.1,
-        direction: Direction::Both,
-        verbose: false
-    }
+    AnomalyDetectionParams::new()
 }
 
 #[derive(Debug)]
@@ -37,6 +32,15 @@ impl AnomalyDetectionResult {
 }
 
 impl AnomalyDetectionParams {
+    pub fn new() -> Self {
+        Self {
+            alpha: 0.05,
+            max_anoms: 0.1,
+            direction: Direction::Both,
+            verbose: false
+        }
+    }
+
     pub fn alpha(&mut self, value: f32) -> &mut Self {
         self.alpha = value;
         self
@@ -67,5 +71,11 @@ impl AnomalyDetectionParams {
         Ok(AnomalyDetectionResult {
             anomalies: detect_anoms(series, period, self.max_anoms, self.alpha, one_tail, upper_tail, self.verbose)?,
         })
+    }
+}
+
+impl Default for AnomalyDetectionParams {
+    fn default() -> Self {
+        Self::new()
     }
 }
