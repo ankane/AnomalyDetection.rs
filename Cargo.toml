@@ -13,4 +13,4 @@ readme = "README.md"
 
 [dependencies]
 distrs = "0.2"
-stlrs = "0.2.2"
+stlrs = "0.3"

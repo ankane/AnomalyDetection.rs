@@ -1,5 +1,6 @@
 use crate::Error;
 use distrs::StudentsT;
+use stlrs::Stl;
 
 fn mad(data: &[f32], med: f32) -> f32 {
     let mut res = data.iter().map(|v| (v - med).abs()).collect::<Vec<f32>>();
@@ -31,7 +32,7 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
     }
 
     // Decompose data. This returns a univarite remainder which will be used for anomaly detection. Optionally, we might NOT decompose.
-    let data_decomp = stlrs::params().robust(true).seasonal_length(data.len() * 10 + 1).fit(data, num_obs_per_period).unwrap();
+    let data_decomp = Stl::params().robust(true).seasonal_length(data.len() * 10 + 1).fit(data, num_obs_per_period).unwrap();
     let seasonal = data_decomp.seasonal();
 
     // Copy data since we need to modify it
