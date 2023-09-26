@@ -3,27 +3,15 @@
 //! [View the docs](https://github.com/ankane/AnomalyDetection.rs)
 
 mod detect_anoms;
+mod detector;
 mod error;
 mod params;
 mod result;
 
+pub use detector::AnomalyDetector;
 pub use error::Error;
 pub use params::{AnomalyDetectionParams, Direction};
 pub use result::AnomalyDetectionResult;
-
-pub struct AnomalyDetector;
-
-impl AnomalyDetector {
-    /// Detects anomalies in a time series.
-    pub fn fit(series: &[f32], period: usize) -> Result<AnomalyDetectionResult, Error> {
-        AnomalyDetectionParams::new().fit(series, period)
-    }
-
-    /// Creates a new set of parameters.
-    pub fn params() -> AnomalyDetectionParams {
-        AnomalyDetectionParams::new()
-    }
-}
 
 pub fn params() -> AnomalyDetectionParams {
     AnomalyDetectionParams::new()
