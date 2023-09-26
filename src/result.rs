@@ -4,6 +4,7 @@ pub struct AnomalyDetectionResult {
 }
 
 impl AnomalyDetectionResult {
+    /// Returns the anomalies.
     pub fn anomalies(&self) -> &[usize] {
         &self.anomalies
     }
