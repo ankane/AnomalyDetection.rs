@@ -11,7 +11,7 @@ Learn [how it works](https://blog.twitter.com/engineering/en_us/a/2015/introduci
 Add this line to your application’s `Cargo.toml` under `[dependencies]`:
 
 ```toml
-anomaly_detection = "0.2"
+anomaly_detection = "0.3"
 ```
 
 ## Getting Started
@@ -19,6 +19,8 @@ anomaly_detection = "0.2"
 Detect anomalies in a time series
 
 ```rust
+use anomaly_detection::AnomalyDetector;
+
 let series = vec![
     5.0, 9.0, 2.0, 9.0, 0.0, 6.0, 3.0, 8.0, 5.0, 18.0,
     7.0, 8.0, 8.0, 0.0, 2.0, 15.0, 0.0, 5.0, 6.0, 7.0,
@@ -26,7 +28,7 @@ let series = vec![
 ];
 let period = 7; // number of observations in a single period
 
-let res = anomaly_detection::params().fit(&series, period).unwrap();
+let res = AnomalyDetector::fit(&series, period).unwrap();
 ```
 
 Get anomalies
@@ -40,7 +42,7 @@ res.anomalies();
 Set parameters
 
 ```rust
-anomaly_detection::params()
+AnomalyDetector::params()
     .alpha(0.05)                    // level of statistical significance
     .max_anoms(0.1)                 // maximum number of anomalies as percent of data
     .direction(Direction::Both)     // Positive, Negative, or Both
