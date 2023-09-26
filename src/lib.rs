@@ -5,9 +5,11 @@
 mod detect_anoms;
 mod error;
 mod params;
+mod result;
 
 pub use error::Error;
-pub use params::{AnomalyDetectionParams, AnomalyDetectionResult, Direction};
+pub use params::{AnomalyDetectionParams, Direction};
+pub use result::AnomalyDetectionResult;
 
 pub struct AnomalyDetector;
 
@@ -16,7 +18,7 @@ impl AnomalyDetector {
         AnomalyDetectionParams::new().fit(series, period)
     }
 
-    pub fn params() ->  AnomalyDetectionParams {
+    pub fn params() -> AnomalyDetectionParams {
         AnomalyDetectionParams::new()
     }
 }

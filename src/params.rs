@@ -1,5 +1,6 @@
-use crate::detect_anoms::detect_anoms;
-use crate::Error;
+use super::detect_anoms::detect_anoms;
+use super::result::AnomalyDetectionResult;
+use super::Error;
 
 #[derive(Clone, Debug)]
 pub enum Direction {
@@ -13,18 +14,7 @@ pub struct AnomalyDetectionParams {
     alpha: f32,
     max_anoms: f32,
     direction: Direction,
-    verbose: bool
-}
-
-#[derive(Clone, Debug)]
-pub struct AnomalyDetectionResult {
-    anomalies: Vec<usize>,
-}
-
-impl AnomalyDetectionResult {
-    pub fn anomalies(&self) -> &[usize] {
-        &self.anomalies
-    }
+    verbose: bool,
 }
 
 impl AnomalyDetectionParams {
@@ -33,7 +23,7 @@ impl AnomalyDetectionParams {
             alpha: 0.05,
             max_anoms: 0.1,
             direction: Direction::Both,
-            verbose: false
+            verbose: false,
         }
     }
 

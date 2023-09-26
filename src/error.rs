@@ -3,7 +3,7 @@ use std::fmt;
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum Error {
-    Series(String)
+    Series(String),
 }
 
 impl error::Error for Error {}
