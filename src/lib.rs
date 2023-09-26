@@ -9,9 +9,21 @@ mod params;
 pub use error::Error;
 pub use params::{params, AnomalyDetectionParams, AnomalyDetectionResult, Direction};
 
+pub struct AnomalyDetector;
+
+impl AnomalyDetector {
+    pub fn fit(series: &[f32], period: usize) -> Result<AnomalyDetectionResult, Error> {
+        AnomalyDetectionParams::new().fit(series, period)
+    }
+
+    pub fn params() ->  AnomalyDetectionParams {
+        AnomalyDetectionParams::new()
+    }
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::{Direction, Error};
+    use crate::{AnomalyDetector, Direction, Error};
 
     fn generate_series() -> Vec<f32> {
         vec![
@@ -24,14 +36,14 @@ mod tests {
     #[test]
     fn test_works() {
         let series = generate_series();
-        let res = crate::params().max_anoms(0.2).fit(&series, 7).unwrap();
+        let res = AnomalyDetector::params().max_anoms(0.2).fit(&series, 7).unwrap();
         assert_eq!(&vec![9, 15, 26], res.anomalies());
     }
 
     #[test]
     fn test_direction_pos() {
         let series = generate_series();
-        let res = crate::params()
+        let res = AnomalyDetector::params()
             .max_anoms(0.2)
             .direction(Direction::Positive)
             .fit(&series, 7)
@@ -42,7 +54,7 @@ mod tests {
     #[test]
     fn test_direction_neg() {
         let series = generate_series();
-        let res = crate::params()
+        let res = AnomalyDetector::params()
             .max_anoms(0.2)
             .direction(Direction::Negative)
             .fit(&series, 7)
@@ -53,7 +65,7 @@ mod tests {
     #[test]
     fn test_alpha() {
         let series = generate_series();
-        let res = crate::params().max_anoms(0.2).alpha(0.5).fit(&series, 7).unwrap();
+        let res = AnomalyDetector::params().max_anoms(0.2).alpha(0.5).fit(&series, 7).unwrap();
         assert_eq!(&vec![1, 4, 9, 15, 26], res.anomalies());
     }
 
@@ -61,7 +73,7 @@ mod tests {
     fn test_nan() {
         let mut series = vec![1.0; 30];
         series[15] = f32::NAN;
-        let result = crate::params().fit(&series, 7);
+        let result = AnomalyDetector::fit(&series, 7);
         assert_eq!(
             result.unwrap_err(),
             Error::Series("series contains NANs".to_string())
@@ -71,7 +83,7 @@ mod tests {
     #[test]
     fn test_empty_data() {
         let series = Vec::new();
-        let result = crate::params().fit(&series, 7);
+        let result = AnomalyDetector::fit(&series, 7);
         assert_eq!(
             result.unwrap_err(),
             Error::Series("series must contain at least 2 periods".to_string())
@@ -81,7 +93,7 @@ mod tests {
     #[test]
     fn test_max_anoms_zero() {
         let series = generate_series();
-        let res = crate::params().max_anoms(0.0).fit(&series, 7).unwrap();
+        let res = AnomalyDetector::params().max_anoms(0.0).fit(&series, 7).unwrap();
         assert!(res.anomalies().is_empty());
     }
 }
