@@ -16,10 +16,6 @@ pub struct AnomalyDetectionParams {
     verbose: bool
 }
 
-pub fn params() -> AnomalyDetectionParams {
-    AnomalyDetectionParams::new()
-}
-
 #[derive(Debug)]
 pub struct AnomalyDetectionResult {
     anomalies: Vec<usize>,

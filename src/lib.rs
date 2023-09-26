@@ -7,7 +7,7 @@ mod error;
 mod params;
 
 pub use error::Error;
-pub use params::{params, AnomalyDetectionParams, AnomalyDetectionResult, Direction};
+pub use params::{AnomalyDetectionParams, AnomalyDetectionResult, Direction};
 
 pub struct AnomalyDetector;
 
@@ -19,6 +19,10 @@ impl AnomalyDetector {
     pub fn params() ->  AnomalyDetectionParams {
         AnomalyDetectionParams::new()
     }
+}
+
+pub fn params() -> AnomalyDetectionParams {
+    AnomalyDetectionParams::new()
 }
 
 #[cfg(test)]
