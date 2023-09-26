@@ -1,14 +1,14 @@
 use crate::detect_anoms::detect_anoms;
 use crate::Error;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum Direction {
     Positive,
     Negative,
     Both,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct AnomalyDetectionParams {
     alpha: f32,
     max_anoms: f32,
@@ -16,7 +16,7 @@ pub struct AnomalyDetectionParams {
     verbose: bool
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct AnomalyDetectionResult {
     anomalies: Vec<usize>,
 }
