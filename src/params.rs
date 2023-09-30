@@ -61,7 +61,15 @@ impl AnomalyDetectionParams {
         };
 
         Ok(AnomalyDetectionResult {
-            anomalies: detect_anoms(series, period, self.max_anoms, self.alpha, one_tail, upper_tail, self.verbose)?,
+            anomalies: detect_anoms(
+                series,
+                period,
+                self.max_anoms,
+                self.alpha,
+                one_tail,
+                upper_tail,
+                self.verbose,
+            )?,
         })
     }
 }

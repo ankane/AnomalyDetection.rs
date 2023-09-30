@@ -18,12 +18,22 @@ fn median_sorted(sorted: &[f32]) -> f32 {
     (sorted[(sorted.len() - 1) / 2] + sorted[sorted.len() / 2]) / 2.0
 }
 
-pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32, one_tail: bool, upper_tail: bool, verbose: bool) -> Result<Vec<usize>, Error> {
+pub fn detect_anoms(
+    data: &[f32],
+    num_obs_per_period: usize,
+    k: f32,
+    alpha: f32,
+    one_tail: bool,
+    upper_tail: bool,
+    verbose: bool,
+) -> Result<Vec<usize>, Error> {
     let n = data.len();
 
     // Check to make sure we have at least two periods worth of data for anomaly context
     if n < num_obs_per_period * 2 {
-        return Err(Error::Series("series must contain at least 2 periods".to_string()));
+        return Err(Error::Series(
+            "series must contain at least 2 periods".to_string(),
+        ));
     }
 
     // Handle NAs
@@ -32,7 +42,11 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
     }
 
     // Decompose data. This returns a univarite remainder which will be used for anomaly detection. Optionally, we might NOT decompose.
-    let data_decomp = Stl::params().robust(true).seasonal_length(data.len() * 10 + 1).fit(data, num_obs_per_period).unwrap();
+    let data_decomp = Stl::params()
+        .robust(true)
+        .seasonal_length(data.len() * 10 + 1)
+        .fit(data, num_obs_per_period)
+        .unwrap();
     let seasonal = data_decomp.seasonal();
 
     // Copy data since we need to modify it
@@ -76,7 +90,11 @@ pub fn detect_anoms(data: &[f32], num_obs_per_period: usize, k: f32, alpha: f32,
             break;
         }
 
-        let (idx, r0) = ares.iter().enumerate().max_by(|(_, a), (_, b)| a.partial_cmp(b).unwrap()).unwrap();
+        let (idx, r0) = ares
+            .iter()
+            .enumerate()
+            .max_by(|(_, a), (_, b)| a.partial_cmp(b).unwrap())
+            .unwrap();
 
         // Only need to take sigma of r for performance
         let r = *r0 / data_sigma;

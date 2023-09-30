@@ -18,6 +18,7 @@ impl AnomalyDetector {
 mod tests {
     use crate::{AnomalyDetector, Direction, Error};
 
+    #[rustfmt::skip]
     fn generate_series() -> Vec<f32> {
         vec![
             5.0, 9.0, 2.0, 9.0, 0.0, 6.0, 3.0, 8.0, 5.0, 18.0,
@@ -29,7 +30,10 @@ mod tests {
     #[test]
     fn test_works() {
         let series = generate_series();
-        let res = AnomalyDetector::params().max_anoms(0.2).fit(&series, 7).unwrap();
+        let res = AnomalyDetector::params()
+            .max_anoms(0.2)
+            .fit(&series, 7)
+            .unwrap();
         assert_eq!(&vec![9, 15, 26], res.anomalies());
     }
 
@@ -58,7 +62,11 @@ mod tests {
     #[test]
     fn test_alpha() {
         let series = generate_series();
-        let res = AnomalyDetector::params().max_anoms(0.2).alpha(0.5).fit(&series, 7).unwrap();
+        let res = AnomalyDetector::params()
+            .max_anoms(0.2)
+            .alpha(0.5)
+            .fit(&series, 7)
+            .unwrap();
         assert_eq!(&vec![1, 4, 9, 15, 26], res.anomalies());
     }
 
@@ -86,7 +94,10 @@ mod tests {
     #[test]
     fn test_max_anoms_zero() {
         let series = generate_series();
-        let res = AnomalyDetector::params().max_anoms(0.0).fit(&series, 7).unwrap();
+        let res = AnomalyDetector::params()
+            .max_anoms(0.0)
+            .fit(&series, 7)
+            .unwrap();
         assert!(res.anomalies().is_empty());
     }
 }
