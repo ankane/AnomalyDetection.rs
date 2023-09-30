@@ -1,6 +1,4 @@
-//! Anomaly detection for Rust
-//!
-//! [View the docs](https://github.com/ankane/AnomalyDetection.rs)
+#![doc = include_str!("../README.md")]
 
 mod detect_anoms;
 mod detector;
