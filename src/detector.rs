@@ -1,5 +1,6 @@
 use super::{AnomalyDetectionParams, AnomalyDetectionResult, Error};
 
+/// An anomaly detector.
 pub struct AnomalyDetector;
 
 impl AnomalyDetector {

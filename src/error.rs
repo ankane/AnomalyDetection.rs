@@ -1,8 +1,10 @@
 use std::error;
 use std::fmt;
 
+/// The error type for anomaly detection.
 #[derive(Debug, Eq, PartialEq)]
 pub enum Error {
+    /// A series error.
     Series(String),
 }
 

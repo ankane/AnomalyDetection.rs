@@ -11,6 +11,7 @@ pub use error::Error;
 pub use params::{AnomalyDetectionParams, Direction};
 pub use result::AnomalyDetectionResult;
 
+/// Creates a new set of parameters.
 pub fn params() -> AnomalyDetectionParams {
     AnomalyDetectionParams::new()
 }

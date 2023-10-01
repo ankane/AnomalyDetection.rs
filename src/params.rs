@@ -2,13 +2,18 @@ use super::detect_anoms::detect_anoms;
 use super::result::AnomalyDetectionResult;
 use super::Error;
 
+/// The direction to detect anomalies.
 #[derive(Clone, Debug)]
 pub enum Direction {
+    /// Positive direction.
     Positive,
+    /// Negative direction.
     Negative,
+    /// Both directions.
     Both,
 }
 
+/// A set of anomaly detection parameters.
 #[derive(Clone, Debug)]
 pub struct AnomalyDetectionParams {
     alpha: f32,
