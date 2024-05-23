@@ -4,7 +4,7 @@ Time series [AnomalyDetection](https://github.com/twitter/AnomalyDetection) for 
 
 Learn [how it works](https://blog.twitter.com/engineering/en_us/a/2015/introducing-practical-and-robust-anomaly-detection-in-a-time-series)
 
-[![Build Status](https://github.com/ankane/AnomalyDetection.rs/workflows/build/badge.svg?branch=master)](https://github.com/ankane/AnomalyDetection.rs/actions)
+[![Build Status](https://github.com/ankane/AnomalyDetection.rs/actions/workflows/build.yml/badge.svg)](https://github.com/ankane/AnomalyDetection.rs/actions)
 
 ## Installation
 
