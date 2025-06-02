@@ -1,3 +1,7 @@
+## 0.3.1 (unreleased)
+
+- Improved docs
+
 ## 0.3.0 (2023-09-25)
 
 - Added `AnomalyDetector` struct
