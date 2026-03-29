@@ -42,7 +42,7 @@ ad.anomalies();
 Set parameters
 
 ```rust
-AnomalyDetector::params()
+let ad = AnomalyDetector::params()
     .alpha(0.05)                    // level of statistical significance
     .max_anoms(0.1)                 // maximum number of anomalies as percent of data
     .direction(Direction::Both)     // Positive, Negative, or Both
