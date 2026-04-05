@@ -18,4 +18,4 @@ stlrs = { git = "https://github.com/ankane/stl-rust.git", default-features = fal
 
 [features]
 default = ["stlrs/std"]
-no_std = ["distrs/nightly", "distrs/no_std", "stlrs/alloc"]
+no_std = ["distrs/no_std", "stlrs/alloc"]
