@@ -34,7 +34,7 @@ let ad = AnomalyDetector::fit(&series, period).unwrap();
 Get anomalies
 
 ```rust
-ad.anomalies();
+let anomalies = ad.anomalies();
 ```
 
 ## Parameters
