@@ -1,6 +1,8 @@
-use super::Error;
+use alloc::{string::ToString, vec::Vec};
 use distrs::StudentsT;
 use stlrs::Stl;
+
+use super::Error;
 
 fn mad(data: &[f32], med: f32) -> f32 {
     let mut res = data.iter().map(|v| (v - med).abs()).collect::<Vec<f32>>();
@@ -69,6 +71,7 @@ pub fn detect_anoms(
     // Compute test statistic until r=max_outliers values have been removed from the sample
     for i in 1..=max_outliers {
         if verbose {
+            #[cfg(not(feature = "no_std"))]
             println!("{} / {} completed", i, max_outliers);
         }
 

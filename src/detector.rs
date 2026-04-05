@@ -18,6 +18,7 @@ impl AnomalyDetector {
 #[cfg(test)]
 mod tests {
     use crate::{AnomalyDetector, Direction, Error};
+    use alloc::{string::ToString, vec, vec::Vec};
 
     #[rustfmt::skip]
     fn generate_series() -> Vec<f32> {

@@ -15,3 +15,6 @@ doctest = false
 [dependencies]
 distrs = "0.2"
 stlrs = "0.3"
+
+[features]
+no_std = ["distrs/no_std"]

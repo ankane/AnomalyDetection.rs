@@ -1,5 +1,6 @@
-use std::error;
-use std::fmt;
+use alloc::string::String;
+use core::error;
+use core::fmt;
 
 /// The error type for anomaly detection.
 #[derive(Debug, Eq, PartialEq)]

@@ -1,3 +1,5 @@
+use alloc::vec::Vec;
+
 /// An anomaly detection result.
 #[derive(Clone, Debug)]
 pub struct AnomalyDetectionResult {
