@@ -1,6 +1,6 @@
 ## 0.4.0 (unreleased)
 
-- Added experimental support for `no_std`
+- Added experimental support for `no_std` (requires `nightly`)
 
 ## 0.3.1 (2025-06-07)
 
