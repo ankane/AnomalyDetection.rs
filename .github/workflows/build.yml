@@ -5,5 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - run: cargo build
       - run: cargo test
+      - run: cargo +nightly build --features no_std
       - run: cargo +nightly test --features no_std
