@@ -1,4 +1,4 @@
-use alloc::{string::ToString, vec::Vec};
+use alloc::vec::Vec;
 use distrs::StudentsT;
 use stlrs::Stl;
 
@@ -33,14 +33,12 @@ pub fn detect_anoms(
 
     // Check to make sure we have at least two periods worth of data for anomaly context
     if n < num_obs_per_period * 2 {
-        return Err(Error::Series(
-            "series must contain at least 2 periods".to_string(),
-        ));
+        return Err(Error::Series("series must contain at least 2 periods"));
     }
 
     // Handle NAs
     if data.iter().any(|v| v.is_nan()) {
-        return Err(Error::Series("series contains NANs".to_string()));
+        return Err(Error::Series("series contains NANs"));
     }
 
     // Decompose data. This returns a univarite remainder which will be used for anomaly detection. Optionally, we might NOT decompose.

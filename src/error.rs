@@ -1,4 +1,3 @@
-use alloc::string::String;
 use core::error;
 use core::fmt;
 
@@ -6,7 +5,7 @@ use core::fmt;
 #[derive(Debug, Eq, PartialEq)]
 pub enum Error {
     /// A series error.
-    Series(String),
+    Series(&'static str),
 }
 
 impl error::Error for Error {}
@@ -14,7 +13,7 @@ impl error::Error for Error {}
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            Error::Series(ref err) => write!(f, "{}", err.as_str()),
+            Error::Series(err) => f.write_str(err),
         }
     }
 }

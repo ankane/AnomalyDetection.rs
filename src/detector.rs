@@ -18,7 +18,7 @@ impl AnomalyDetector {
 #[cfg(test)]
 mod tests {
     use crate::{AnomalyDetector, Direction, Error};
-    use alloc::{string::ToString, vec, vec::Vec};
+    use alloc::{vec, vec::Vec};
 
     #[rustfmt::skip]
     fn generate_series() -> Vec<f32> {
@@ -77,10 +77,7 @@ mod tests {
         let mut series = vec![1.0; 30];
         series[15] = f32::NAN;
         let result = AnomalyDetector::fit(&series, 7);
-        assert_eq!(
-            result.unwrap_err(),
-            Error::Series("series contains NANs".to_string())
-        );
+        assert_eq!(result.unwrap_err(), Error::Series("series contains NANs"));
     }
 
     #[test]
@@ -89,7 +86,7 @@ mod tests {
         let result = AnomalyDetector::fit(&series, 7);
         assert_eq!(
             result.unwrap_err(),
-            Error::Series("series must contain at least 2 periods".to_string())
+            Error::Series("series must contain at least 2 periods")
         );
     }
 
