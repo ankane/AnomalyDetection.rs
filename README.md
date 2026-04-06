@@ -28,7 +28,7 @@ let series = vec![
 ];
 let period = 7; // number of observations in a single period
 
-let ad = AnomalyDetector::fit(&series, period).unwrap();
+let ad = AnomalyDetector::fit(&series, period)?;
 ```
 
 Get anomalies
@@ -47,7 +47,7 @@ let ad = AnomalyDetector::params()
     .max_anoms(0.1)                 // maximum number of anomalies as percent of data
     .direction(Direction::Both)     // Positive, Negative, or Both
     .verbose(false)                 // show progress
-    .fit(&series, period);
+    .fit(&series, period)?;
 ```
 
 ## Credits
