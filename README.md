@@ -11,7 +11,7 @@ Learn [how it works](https://blog.twitter.com/engineering/en_us/a/2015/introduci
 Add this line to your application’s `Cargo.toml` under `[dependencies]`:
 
 ```toml
-anomaly_detection = "0.3"
+anomaly_detection = "0.4"
 ```
 
 ## Getting Started

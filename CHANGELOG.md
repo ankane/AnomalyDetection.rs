@@ -1,4 +1,4 @@
-## 0.4.0 (unreleased)
+## 0.4.0 (2026-04-07)
 
 - Added experimental support for `no_std` (requires `nightly`)
 - Changed `Error::Series` to use `&'static str` instead of `String`
