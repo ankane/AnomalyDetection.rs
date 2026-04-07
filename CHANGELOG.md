@@ -1,6 +1,7 @@
 ## 0.4.0 (unreleased)
 
 - Added experimental support for `no_std` (requires `nightly`)
+- Changed `Error::Series` to use `&'static str` instead of `String`
 
 ## 0.3.1 (2025-06-07)
 
