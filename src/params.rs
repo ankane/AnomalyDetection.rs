@@ -1,6 +1,6 @@
 use super::detect_anoms::detect_anoms;
 use super::result::AnomalyDetectionResult;
-use super::Error;
+use super::{Error, Float};
 
 /// The direction to detect anomalies.
 #[derive(Clone, Debug)]
@@ -58,7 +58,11 @@ impl AnomalyDetectionParams {
     }
 
     /// Detects anomalies in a time series.
-    pub fn fit(&self, series: &[f32], period: usize) -> Result<AnomalyDetectionResult, Error> {
+    pub fn fit<T: Float>(
+        &self,
+        series: &[T],
+        period: usize,
+    ) -> Result<AnomalyDetectionResult, Error> {
         let (one_tail, upper_tail) = match self.direction {
             Direction::Positive => (true, true),
             Direction::Negative => (true, false),

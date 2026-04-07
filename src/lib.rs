@@ -6,11 +6,13 @@ extern crate alloc;
 mod detect_anoms;
 mod detector;
 mod error;
+mod float;
 mod params;
 mod result;
 
 pub use detector::AnomalyDetector;
 pub use error::Error;
+pub use float::Float;
 pub use params::{AnomalyDetectionParams, Direction};
 pub use result::AnomalyDetectionResult;
 

@@ -30,8 +30,21 @@ mod tests {
     }
 
     #[test]
-    fn test_works() {
+    fn test_f32() {
         let series = generate_series();
+        let res = AnomalyDetector::params()
+            .max_anoms(0.2)
+            .fit(&series, 7)
+            .unwrap();
+        assert_eq!(&vec![9, 15, 26], res.anomalies());
+    }
+
+    #[test]
+    fn test_f64() {
+        let series: Vec<f64> = vec![
+            5.0, 9.0, 2.0, 9.0, 0.0, 6.0, 3.0, 8.0, 5.0, 18.0, 7.0, 8.0, 8.0, 0.0, 2.0, -5.0, 0.0,
+            5.0, 6.0, 7.0, 3.0, 6.0, 1.0, 4.0, 4.0, 4.0, 30.0, 7.0, 5.0, 8.0,
+        ];
         let res = AnomalyDetector::params()
             .max_anoms(0.2)
             .fit(&series, 7)

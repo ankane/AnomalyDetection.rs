@@ -2,26 +2,26 @@ use alloc::vec::Vec;
 use distrs::StudentsT;
 use stlrs::Stl;
 
-use super::Error;
+use super::{Error, Float};
 
-fn mad(data: &[f32], med: f32) -> f32 {
-    let mut res = data.iter().map(|v| (v - med).abs()).collect::<Vec<f32>>();
+fn mad<T: Float>(data: &[T], med: T) -> T {
+    let mut res = data.iter().map(|v| (*v - med).abs()).collect::<Vec<T>>();
     res.sort_unstable_by(|a, b| a.partial_cmp(b).unwrap());
-    1.4826 * median_sorted(&res)
+    T::from_f64(1.4826) * median_sorted(&res)
 }
 
-fn median(data: &[f32]) -> f32 {
+fn median<T: Float>(data: &[T]) -> T {
     let mut sorted = data.to_vec();
     sorted.sort_unstable_by(|a, b| a.partial_cmp(b).unwrap());
     median_sorted(&sorted)
 }
 
-fn median_sorted(sorted: &[f32]) -> f32 {
-    (sorted[(sorted.len() - 1) / 2] + sorted[sorted.len() / 2]) / 2.0
+fn median_sorted<T: Float>(sorted: &[T]) -> T {
+    (sorted[(sorted.len() - 1) / 2] + sorted[sorted.len() / 2]) / T::from_f64(2.0)
 }
 
-pub fn detect_anoms(
-    data: &[f32],
+pub fn detect_anoms<T: Float>(
+    data: &[T],
     num_obs_per_period: usize,
     k: f32,
     alpha: f32,
@@ -37,7 +37,7 @@ pub fn detect_anoms(
     }
 
     // Handle NAs
-    if data.iter().any(|v| v.is_nan()) {
+    if data.iter().any(|v| (*v).is_nan()) {
         return Err(Error::Series("series contains NANs"));
     }
 
@@ -74,20 +74,20 @@ pub fn detect_anoms(
         }
 
         let ma = median_sorted(&data);
-        let ares: Vec<f32>;
+        let ares: Vec<T>;
         if one_tail {
             if upper_tail {
-                ares = data.iter().map(|v| v - ma).collect();
+                ares = data.iter().map(|v| *v - ma).collect();
             } else {
-                ares = data.iter().map(|v| ma - v).collect();
+                ares = data.iter().map(|v| ma - *v).collect();
             }
         } else {
-            ares = data.iter().map(|v| (v - ma).abs()).collect();
+            ares = data.iter().map(|v| (*v - ma).abs()).collect();
         }
 
         // Protect against constant time series
         let data_sigma = mad(&data, ma);
-        if data_sigma == 0.0 {
+        if data_sigma == T::zero() {
             break;
         }
 
@@ -114,7 +114,7 @@ pub fn detect_anoms(
         let t = StudentsT::ppf(p as f64, (n - i - 1) as u32) as f32;
         let lam = t * (n - i) as f32 / (((n - i - 1) as f32 + t * t) * (n - i + 1) as f32).sqrt();
 
-        if r > lam {
+        if r > T::from_f64(lam as f64) {
             num_anoms = i;
         }
     }
