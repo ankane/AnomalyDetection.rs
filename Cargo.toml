@@ -13,8 +13,8 @@ readme = "README.md"
 doctest = false
 
 [dependencies]
-distrs = { git = "https://github.com/ankane/dist-rust.git" }
-stlrs = { git = "https://github.com/ankane/stl-rust.git", default-features = false }
+distrs = "0.2.3"
+stlrs = "0.4"
 
 [features]
 default = ["stlrs/std"]
